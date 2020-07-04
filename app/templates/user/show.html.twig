@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title_user_index'|trans }}
+{% endblock %}
+{% block body %}
+
+    <h1>{{ 'label_title_data'|trans }}</h1>
+    {% if user is defined and user|length %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label_id'|trans }}</dt>
+            <dd>{{ user.id }}</dd>
+            <dt>{{ 'label.email'|trans }}</dt>
+            <dd>{{ user.email }}</dd>
+            <dt>{{ 'label_last_updatedat'|trans }}</dt>
+            <dd>{{ user.userdata.updatedAt|format_date('long') }}</dd>
+            <dt>{{ 'label.name'|trans }}</dt>
+            <dd>{{  user.userdata.firstname }}</dd>
+            <dt>{{ 'label.surname'|trans }}</dt>
+            <dd>{{ user.userdata.lastname }}</dd>
+        </dl>
+    {% endif %}
+    <div class="options text-left">
+        <a href="{{ url('user_data_edit', {id: user.id}) }}" class="btn btn-primary" role="button" title="{{ 'action.editData'|trans }}">
+            {{ 'action.editData'|trans }}
+        </a>
+        <a href="{{ url('user_password', {id: user.id}) }}" class="btn btn-primary" role="button" title="{{ 'action.changePassword'|trans }}">
+            {{ 'action.changePassword'|trans }}
+        </a>
+
+    </div>
+
+{% endblock %}

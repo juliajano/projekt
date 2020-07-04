@@ -7,8 +7,8 @@ services:
         ports:
           - 8000:80
         volumes:
-          - .docker/config/vhosts:/etc/apache2/sites-enabled
-          - ./app:/home/wwwroot/sf
+          - /c/Users/JUL/Desktop/projekty/test/.docker/config/vhosts:/etc/apache2/sites-enabled
+          - /c/Users/JUL/Desktop/projekty/test/app:/home/wwwroot/sf
         depends_on:
           - php
 
@@ -19,7 +19,7 @@ services:
         command: "--default-authentication-plugin=mysql_native_password"
         container_name: sf_mysql
         volumes:
-            - ./data/db:/var/lib/mysql
+            - /data/db:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: sf
@@ -30,7 +30,7 @@ services:
         build: .docker/php
         container_name: sf_php
         volumes:
-          - ./app:/home/wwwroot/sf
+          - /c/Users/JUL/Desktop/projekty/test/app:/home/wwwroot/sf
         environment:
           - maildev_host=sf_maildev
         depends_on:

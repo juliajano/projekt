@@ -52,7 +52,6 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata = new UserData();
             $userdata->setFirstname($this->faker->firstName);
             $userdata->setLastname($this->faker->lastName);
-            $userdata->setUpdatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $user->setUserData($userdata);
 
 
@@ -73,7 +72,6 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata = new UserData();
             $userdata->setFirstname($this->faker->firstName);
             $userdata->setLastname($this->faker->lastName);
-            $userdata->setUpdatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
             $user->setUserData($userdata);
 
 

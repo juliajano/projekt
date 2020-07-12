@@ -28,18 +28,6 @@ class UserData
      */
     private $id;
 
-    /**
-     * Updated at.
-     *
-     * @var DateTimeInterface
-     *
-     * @ORM\Column(type="datetime")
-     *
-     * @Assert\DateTime
-     *
-     *
-     */
-    private $updatedAt;
 
     /**
      * Firstname.
@@ -91,26 +79,6 @@ class UserData
         return $this->id;
     }
 
-    /**
-     * Getter for Updated at.
-     *
-     * @return DateTimeInterface|null Updated at
-     */
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Setter for Updated at.
-     *
-     * @param DateTimeInterface $updatedAt Updated at.
-     *
-     */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
 
     /**
      * Getter for Firstname.

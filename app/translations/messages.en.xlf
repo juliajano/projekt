@@ -36,27 +36,22 @@
                 <source>message_empty_list</source>
                 <target>Empty list.</target>
             </trans-unit>
-
-             <trans-unit id="message_not_found">
-                 <source>message_not_found</source>
-                 <target>Records list</target>
-             </trans-unit>
-
+            <trans-unit id="message_not_found">
+                <source>message_not_found</source>
+                <target>Records list</target>
+            </trans-unit>
             <trans-unit id="title_record_list">
                 <source>title_record_list</source>
                 <target>Records list</target>
             </trans-unit>
-
             <trans-unit id="title_record_view">
                 <source>title_record_view</source>
                 <target>Record view</target>
             </trans-unit>
-
             <trans-unit id="message_created_successfully">
                 <source>message_created_successfully</source>
                 <target>Message created successfully</target>
             </trans-unit>
-
             <trans-unit id="title_category_edit">
                  <source>title_category_edit</source>
                  <target>Edit category</target>
@@ -85,9 +80,6 @@
                   <source>category_index</source>
                   <target>Show all categories</target>
              </trans-unit>
-
-
-
              <trans-unit id="title_task_create">
                   <source>title_task_create</source>
                   <target>Create task</target>
@@ -232,7 +224,34 @@
                   <source>action_login</source>
                   <target>login</target>
              </trans-unit>
-
+             <trans-unit id="action.editData">
+                  <source>action.editData</source>
+                  <target>edit data</target>
+             </trans-unit>
+             <trans-unit id="title_change_data">
+                  <source>title_change_data</source>
+                  <target>Change data</target>
+             </trans-unit>
+             <trans-unit id="message_updated_data_successfully">
+                  <source>message_updated_data_successfully</source>
+                  <target>Updated successfully</target>
+             </trans-unit>
+             <trans-unit id="title_user_list">
+                  <source>title_user_list</source>
+                  <target>Users list</target>
+             </trans-unit>
+             <trans-unit id="label_username">
+                  <source>label_username</source>
+                  <target>Username</target>
+             </trans-unit>
+             <trans-unit id="action_changePassword">
+                   <source>action_changePassword</source>
+                   <target>Change password</target>
+             </trans-unit>
+             <trans-unit id="label_tasks">
+                   <source>label_tasks</source>
+                   <target>Tasks</target>
+             </trans-unit>
          </body>
     </file>
 </xliff>

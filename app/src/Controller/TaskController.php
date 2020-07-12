@@ -10,6 +10,7 @@ use App\Form\TaskType;
 
 use App\Repository\TaskRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -42,11 +43,9 @@ class TaskController extends AbstractController
     public function index(Request $request, TaskRepository $taskRepository, PaginatorInterface $paginator): Response
     {
 
-        $page=$request->query->getInt('page', 1);
-
         $pagination = $paginator->paginate(
-            $taskRepository->queryAll(),
-            $page,
+            $taskRepository->queryByAuthor($this->getUser()),
+            $request->query->getInt('page', 1),
             TaskRepository::PAGINATOR_ITEMS_PER_PAGE
         );
 
@@ -68,6 +67,11 @@ class TaskController extends AbstractController
      *     methods={"GET"},
      *     name="task_show",
      *     requirements={"id": "[1-9]\d*"},
+     * )
+     *
+     * @IsGranted(
+     *     "VIEW",
+     *     subject="task",
      * )
      */
     public function show(Task $task): Response
@@ -103,6 +107,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
+            $task->setAuthor($this->getUser());
             $task->setCreatedAt(new \DateTime());
             $task->setUpdatedAt(new \DateTime());
             $taskRepository->save($task);
@@ -135,9 +140,20 @@ class TaskController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="task_edit",
      * )
+     *
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="task",
+     * )
      */
     public function edit(Request $request, Task $task, TaskRepository $taskRepository): Response
     {
+        if ($task->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('task_index');
+        }
+
         $form = $this->createForm(TaskType::class, $task, ['method' => 'PUT']);
         $form->handleRequest($request);
 
@@ -177,9 +193,20 @@ class TaskController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="task_delete",
      * )
+     *
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="task",
+     * )
      */
     public function delete(Request $request, Task $task, TaskRepository $taskRepository): Response
     {
+        if ($task->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('task_index');
+        }
+
         $form = $this->createForm(TaskType::class, $task, ['method' => 'DELETE']);
         $form->handleRequest($request);
 

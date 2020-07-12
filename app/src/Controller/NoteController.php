@@ -11,6 +11,7 @@ use App\Form\NoteType;
 use App\Repository\NoteRepository;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -43,13 +44,14 @@ class NoteController extends AbstractController
     public function index(Request $request, NoteRepository $noteRepository, PaginatorInterface $paginator): Response
     {
 
-        $page = $request->query->getInt('page', 1);
+
 
         $pagination = $paginator->paginate(
-            $noteRepository->queryAll(),
-            $page,
+            $noteRepository->queryByAuthor($this->getUser()),
+            $request->query->getInt('page', 1),
             NoteRepository::PAGINATOR_ITEMS_PER_PAGE
         );
+
 
         return $this->render(
             'note/index.html.twig',
@@ -69,6 +71,11 @@ class NoteController extends AbstractController
      *     methods={"GET"},
      *     name="note_show",
      *     requirements={"id": "[1-9]\d*"},
+     * )
+     *
+     * @IsGranted(
+     *     "VIEW",
+     *     subject="note",
      * )
      */
     public function show(Note $note): Response
@@ -104,6 +111,7 @@ class NoteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
+            $note->setAuthor($this->getUser());
             $note->setCreatedAt(new \DateTime());
             $note->setUpdatedAt(new \DateTime());
             $noteRepository->save($note);
@@ -136,9 +144,20 @@ class NoteController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="note_edit",
      * )
+     *
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="note",
+     * )
      */
     public function edit(Request $request, Note $note, NoteRepository $noteRepository): Response
     {
+        if ($note->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('note_index');
+        }
+
         $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
         $form->handleRequest($request);
 
@@ -178,9 +197,19 @@ class NoteController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="note_delete",
      * )
+     *
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="note",
+     * )
      */
     public function delete(Request $request, Note $note, NoteRepository $noteRepository): Response
     {
+        if ($note->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('note_index');
+        }
         $form = $this->createForm(NoteType::class, $note, ['method' => 'DELETE']);
         $form->handleRequest($request);
 

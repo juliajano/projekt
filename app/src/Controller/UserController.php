@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  *
  * @Route("/user")
  *
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_USER")
  */
 class UserController extends AbstractController
 {
@@ -41,6 +41,7 @@ class UserController extends AbstractController
      *     "/",
      *     name="user_index",
      * )
+     *
      */
     public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
     {
@@ -123,7 +124,7 @@ class UserController extends AbstractController
             $repository->saveUser($user);
             $this->addFlash('success', 'message_password_updated_successfully');
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('user_show');
         }
 
         return $this->render(
@@ -174,7 +175,7 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'message_updated_data_successfully');
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('user_show');
         }
 
         return $this->render(

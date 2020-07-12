@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Note;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,6 +48,23 @@ class NoteRepository extends ServiceEntityRepository
         return $this->getOrCreateQueryBuilder()
             ->select('note')
             ->orderBy('note.updated_at', 'DESC');
+    }
+
+    /**
+     * Query tasks by author.
+     *
+     * @param \App\Entity\User $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        $queryBuilder->andWhere('note.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
     }
 
     /**

@@ -6,6 +6,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -44,20 +45,15 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
-     * Query tasks by author.
+     * Get or create new query builder.
      *
-     * @param \App\Entity\User $user User entity
+     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
      *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
-    public function queryByAuthor(User $user): QueryBuilder
+    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
     {
-        $queryBuilder = $this->queryAll();
-
-        $queryBuilder->andWhere('task.author = :author')
-            ->setParameter('author', $user);
-
-        return $queryBuilder;
+        return $queryBuilder ?? $this->createQueryBuilder('task');
     }
 
     /**
@@ -75,31 +71,6 @@ class TaskRepository extends ServiceEntityRepository
     }
 
     /**
-     * Query all records.
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    public function queryAll(): QueryBuilder
-    {
-        return $this->getOrCreateQueryBuilder()
-            ->select('task', 'category')
-            ->join ('task.category', 'category')
-            ->orderBy('task.updatedAt', 'DESC');
-    }
-
-    /**
-     * Get or create new query builder.
-     *
-     * @param \Doctrine\ORM\QueryBuilder|null $queryBuilder Query builder
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
-    {
-        return $queryBuilder ?? $this->createQueryBuilder('task');
-    }
-
-    /**
      * Delete record.
      *
      * @param \App\Entity\Task $task Task entity
@@ -113,4 +84,67 @@ class TaskRepository extends ServiceEntityRepository
         $this->_em->flush($task);
     }
 
+    /**
+     * Query tasks by author.
+     *
+     * @param \App\Entity\User $user    User entity
+     * @param array            $filters Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user, array $filters = []): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll($filters);
+        $queryBuilder->andWhere('task.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
+    }
+
+    /**
+     * Query all records.
+     *
+     * @param array $filters Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryAll(array $filters = []): QueryBuilder
+    {
+        $queryBuilder = $this->getOrCreateQueryBuilder()
+            ->select(
+                'partial task.{id, title}',
+                'partial category.{id, title}',
+                'partial tags.{id, name}',
+                'partial author.{id, email}',
+                )
+            ->join('task.category', 'category')
+            ->join('task.author', 'author')
+            ->leftJoin('task.tags', 'tags');
+        $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
+
+        return $queryBuilder;
+    }
+
+    /**
+     * Apply filters to paginated list.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder Query builder
+     * @param array                      $filters      Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function applyFiltersToList(QueryBuilder $queryBuilder, array $filters = []): QueryBuilder
+    {
+        if (isset($filters['category']) && $filters['category'] instanceof Category) {
+            $queryBuilder->andWhere('category = :category')
+                ->setParameter('category', $filters['category']);
+        }
+
+        if (isset($filters['tag']) && $filters['tag'] instanceof Tag) {
+            $queryBuilder->andWhere('tags IN (:tag)')
+                ->setParameter('tag', $filters['tag']);
+        }
+
+        return $queryBuilder;
+    }
 }

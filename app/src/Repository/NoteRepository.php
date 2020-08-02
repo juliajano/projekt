@@ -1,14 +1,21 @@
 <?php
+/**
+ * Note repository.
+ */
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Note;
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * Class NoteRepository.
+ *
  * @method Note|null find($id, $lockMode = null, $lockVersion = null)
  * @method Note|null findOneBy(array $criteria, array $orderBy = null)
  * @method Note[]    findAll()
@@ -32,7 +39,6 @@ class NoteRepository extends ServiceEntityRepository
      *
      * @param \Doctrine\Common\Persistence\ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Note::class);
@@ -41,28 +47,24 @@ class NoteRepository extends ServiceEntityRepository
     /**
      * Query all records.
      *
+     * @param array $filters Filters array
+     *
      * @return \Doctrine\ORM\QueryBuilder Query builder
      */
-    public function queryAll(): QueryBuilder
+    public function queryAll(array $filters = []): QueryBuilder
     {
-        return $this->getOrCreateQueryBuilder()
-            ->select('note')
+        $queryBuilder = $this->getOrCreateQueryBuilder()
+            ->select(
+                'partial note.{id, title}',
+                'partial category.{id, title}',
+                'partial tags.{id, name}',
+                'partial author.{id, email}',
+                )
+            ->join('note.author', 'author')
+            ->join('note.category', 'category')
+            ->leftJoin('note.tags', 'tags')
             ->orderBy('note.updated_at', 'DESC');
-    }
-
-    /**
-     * Query tasks by author.
-     *
-     * @param \App\Entity\User $user User entity
-     *
-     * @return \Doctrine\ORM\QueryBuilder Query builder
-     */
-    public function queryByAuthor(User $user): QueryBuilder
-    {
-        $queryBuilder = $this->queryAll();
-
-        $queryBuilder->andWhere('note.author = :author')
-            ->setParameter('author', $user);
+        $queryBuilder = $this->applyFiltersToList($queryBuilder, $filters);
 
         return $queryBuilder;
     }
@@ -80,6 +82,23 @@ class NoteRepository extends ServiceEntityRepository
     }
 
     /**
+     * Query notes by author.
+     *
+     * @param \App\Entity\User $user    User entity
+     * @param array            $filters Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user, array $filters = []): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll($filters);
+        $queryBuilder->andWhere('note.author = :author')
+            ->setParameter('author', $user);
+
+        return $queryBuilder;
+    }
+
+    /**
      * Save record.
      *
      * @param \App\Entity\Note $note Note entity
@@ -92,7 +111,6 @@ class NoteRepository extends ServiceEntityRepository
         $this->_em->persist($note);
         $this->_em->flush($note);
     }
-
 
     /**
      * Delete record.
@@ -108,33 +126,26 @@ class NoteRepository extends ServiceEntityRepository
         $this->_em->flush($note);
     }
 
-
-    // /**
-    //  * @return Note[] Returns an array of Note objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Apply filters to paginated list.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder Query builder
+     * @param array                      $filters      Filters array
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    private function applyFiltersToList(QueryBuilder $queryBuilder, array $filters = []): QueryBuilder
     {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('n.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        if (isset($filters['category']) && $filters['category'] instanceof Category) {
+            $queryBuilder->andWhere('category = :category')
+                ->setParameter('category', $filters['category']);
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Note
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (isset($filters['tag']) && $filters['tag'] instanceof Tag) {
+            $queryBuilder->andWhere('tags IN (:tag)')
+                ->setParameter('tag', $filters['tag']);
+        }
+
+        return $queryBuilder;
     }
-    */
 }

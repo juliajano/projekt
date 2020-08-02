@@ -10,21 +10,53 @@
         <dl class="dl-horizontal">
             <dt>{{ 'label_id'|trans }}</dt>
             <dd>{{ task.id }}</dd>
+            {% if is_granted("ROLE_ADMIN") %}
+                <dt>{{ 'label_author'|trans }}</dt>
+                <dd>{{ task.author.email }}</dd>
+            {%  endif %}
             <dt>{{ 'label_created_at'|trans }}</dt>
             <dd>{{ task.createdAt|date('Y/m/d') }}</dd>
             <dt>{{ 'label_updated_at'|trans }}</dt>
             <dd>{{ task.updatedAt|date('Y/m/d') }}</dd>
             <dt>{{ 'label_title'|trans }}</dt>
             <dd>{{  task.title }}</dd>
+
         </dl>
-        <p>
-            <a href="{{ url('task_index') }}" title="{{ 'action_back_to_list'|trans }}">
-                {{ 'action_back_to_list'|trans }}
-            </a>
-        </p>
-    {% else %}
-        <p>
-            {{ 'message_item_not_found'|trans }}
-        </p>
+        <br>
+        <dt><h4>{{ 'label_comments'|trans }}</h4></dt>
+        <dd>{%  for comment in task.comments %}
+                <strong>{{ comment.createdAt|date('d.m.Y') }}</strong><br>
+                {{ comment.content }}
+                <br>
+                <p>
+                    <a href="{{ url('comment_delete', {'id': comment.id})}}" title="{{ 'action_delete'|trans }}" class="btn btn-info">
+                        {{ 'action_delete'|trans }}
+                    </a>
+                </p>
+            {% endfor %}
+        </dd>
+        </dl>
+        <div>
+            <br>
+            <h5>{{ 'add_comment'|trans }}</h5>
+
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <p>
+                    <a href="{{ url('comment_create', {'id': task.id}) }}" title="{{ 'action_create'|trans }}" class="btn btn-info">
+                        {{ 'action_create'|trans }}
+                    </a>
+                </p>
+                <p>
+                    <a href="{{ url('task_index') }}" title="{{ 'action_back_to_list'|trans }}" class="btn btn-info">
+                        {{ 'action_back_to_list'|trans }}
+                    </a>
+                </p>
+            {% else %}
+                <p>
+                    {{ 'message_item_not_found'|trans }}
+                </p>
+            {% endif %}
+        </div>
     {% endif %}
+
 {% endblock %}

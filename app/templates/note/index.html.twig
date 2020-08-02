@@ -16,10 +16,13 @@
             <thead>
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label_id'|trans, 'note.id') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label_created_at'|trans, 'note.createdAt') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_updated_at'|trans, 'note.updatedAt') }}</th>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <th>{{ 'label_author'|trans }}</th>
+                {% endif %}
                 <th>{{ knp_pagination_sortable(pagination, 'label_title'|trans, 'note.title') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_category'|trans, 'category.title') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label_tags'|trans, 'tag.name') }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
@@ -27,10 +30,27 @@
             {% for note in pagination.items %}
                 <tr>
                     <td>{{ note.id }}</td>
-                    <td>{{ note.createdAt|date('d/m/Y') }}</td>
                     <td>{{ note.updatedAt|date('d/m/Y') }}</td>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <td>{{ note.author.email }}</td>
+                    {%  endif %}
                     <td>{{ note.title }}</td>
-                    <td>{{ note.category.title }}</td>
+                    <td>
+                        <a href="{{ url('note_index', {'filters' : {'category' : note.category.id}}) }}" title="{{ note.category.title }}">
+                            {{ note.category.title }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if note.tags is defined and note.tags|length %}
+                            {% for tag in note.tags %}
+                                <a href="{{ url('note_index', {'filters' : {'tag' : tag.id}}) }}" title="{{ tag.name }}">
+                                    {{ tag.name }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{{ url('note_show', {id: note.id}) }}" title="{{ 'action_view'|trans }}">
                             {{ 'action_view'|trans }}

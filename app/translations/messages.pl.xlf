@@ -100,7 +100,7 @@
            </trans-unit>
            <trans-unit id="message_updated_successfully">
                  <source>message_updated_successfully</source>
-                 <target>Edytowano kategorię</target>
+                 <target>Edytowano</target>
            </trans-unit>
            <trans-unit id="category_index">
                  <source>category_index</source>
@@ -274,7 +274,82 @@
                    <source>label_tasks</source>
                    <target>Zadania</target>
              </trans-unit>
-
+             <trans-unit id="title_register">
+                   <source>title_register</source>
+                   <target>Zarejestruj się</target>
+             </trans-unit>
+             <trans-unit id="label_email">
+                   <source>label_email</source>
+                   <target>E-mail</target>
+             </trans-unit>
+             <trans-unit id="label_password">
+                   <source>label_password</source>
+                   <target>Hasło</target>
+             </trans-unit>
+             <trans-unit id="label_confirm_password">
+                   <source>label_confirm_password</source>
+                   <target>Powtórz hasło</target>
+             </trans-unit>
+             <trans-unit id="label_userdata">
+                   <source>label_userdata</source>
+                   <target>Dane użytkownika</target>
+             </trans-unit>
+             <trans-unit id="message_registered_successfully">
+                   <source>message_registered_successfully</source>
+                   <target>Rejestracja zakończona pomyślnie</target>
+             </trans-unit>
+             <trans-unit id="label_comments">
+                   <source>label_comments</source>
+                   <target>Komentarze</target>
+             </trans-unit>
+             <trans-unit id="add_comment">
+                   <source>add_comment</source>
+                   <target>Dodaj komentarz</target>
+             </trans-unit>
+             <trans-unit id="title_comment_create">
+                   <source>title_comment_create</source>
+                   <target>Dodaj komentarz</target>
+             </trans-unit>
+             <trans-unit id="title_comment_delete">
+                   <source>title_comment_delete</source>
+                   <target>Usuń komentarz</target>
+             </trans-unit>
+             <trans-unit id="message_comment_deleted_successfully">
+                   <source>message_comment_deleted_successfully</source>
+                   <target>Usunięto komentarz</target>
+             </trans-unit>
+             <trans-unit id="action_register">
+                   <source>action_register</source>
+                   <target>Zarejestruj się</target>
+             </trans-unit>
+             <trans-unit id="label_author">
+                   <source>label_author</source>
+                   <target>Autor</target>
+             </trans-unit>
+             <trans-unit id="title_users_index">
+                   <source>title_users_index</source>
+                   <target>Użytkownicy</target>
+             </trans-unit>
+             <trans-unit id="message_deleted_successfully">
+                   <source>message_deleted_successfully</source>
+                   <target>Usunięto</target>
+             </trans-unit>
+             <trans-unit id="comment_created_successfully">
+                   <source>comment_created_successfully</source>
+                   <target>Dodano komentarz</target>
+             </trans-unit>
+             <trans-unit id="message_note_deleted_successfully">
+                   <source>message_note_deleted_successfully</source>
+                   <target>Usunięto notatkę</target>
+             </trans-unit>
+             <trans-unit id="message_tag_is_related_to_resources">
+                   <source>message_tag_is_related_to_resources</source>
+                   <target>Tag jest powiązany z notatką/zadaniem</target>
+             </trans-unit>
+             <trans-unit id="title_task_delete">
+                   <source>title_task_delete</source>
+                   <target>Usuń zadanie</target>
+             </trans-unit>
         </body>
     </file>
 </xliff>

@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class ChangePasswordType.
@@ -28,8 +30,18 @@ class ChangePasswordType extends AbstractType
             RepeatedType::class,
             [
                 'type' => PasswordType::class,
-                'invalid_message' => 'error_password_must_match',
                 'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(
+                        [
+                            'min' => 6,
+                            'max' => 255,
+                        ]
+                    ),
+                ],
+
+
 
                 'first_options' => [
                     'label' => 'label.password',

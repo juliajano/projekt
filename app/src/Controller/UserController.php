@@ -10,15 +10,17 @@ use App\Form\ChangePasswordType;
 use App\Form\UserDataType;
 use App\Repository\UserDataRepository;
 use App\Repository\UserRepository;
+use App\Service\UserDataService;
+use App\Service\UserService;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function Composer\Autoload\includeFile;
 
 /**
  * Class TaskController.
@@ -30,34 +32,58 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserController extends AbstractController
 {
     /**
+     * User service.
+     *
+     * @var \App\Service\UserService
+     */
+    private $userService;
+
+    /**
+     * UserData service.
+     *
+     * @var \App\Service\UserDataService
+     */
+    private $userDataService;
+
+    /**
+     * UserController constructor.
+     *
+     * @param \App\Service\UserService $userService     User service
+     * @param UserDataService          $userDataService UserData service
+     */
+    public function __construct(UserService $userService, UserDataService $userDataService)
+    {
+        $this->userService = $userService;
+        $this->userDataService = $userDataService;
+    }
+
+    /**
      * Index action.
      *
-     * @param Request $request HTTP request
-     * @param UserRepository $userRepository
-     * @param PaginatorInterface $paginator
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
+     *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @Route(
      *     "/",
+     *     methods={"GET"},
      *     name="user_index",
      * )
      *
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
-
-        $pagination = $paginator->paginate(
-            $userRepository->queryAll(),
-            $page,
-            UserRepository::PAGINATOR_ITEMS_PER_PAGE
-        );
+        $pagination = $this->userService->createPaginatedList($page);
 
         return $this->render(
             'user/index.html.twig',
             ['pagination' => $pagination]
         );
     }
+
+
 
     /**
      * Show action.
@@ -85,7 +111,6 @@ class UserController extends AbstractController
      *
      * @param Request $request HTTP request
      * @param User $user
-     * @param UserRepository $repository User repository
      * @param UserPasswordEncoderInterface $passwordEncoder
      *
      * @return Response HTTP response
@@ -121,10 +146,10 @@ class UserController extends AbstractController
                     $form->get('password')->getData()
                 )
             );
-            $repository->saveUser($user);
+            $this->userService->saveUser($user);
             $this->addFlash('success', 'message_password_updated_successfully');
 
-            return $this->redirectToRoute('user_show');
+            return $this->redirectToRoute('task_index');
         }
 
         return $this->render(
@@ -170,12 +195,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $UserDataRepository->save($userData);
-            $repository->saveUser($user);
+            $this->userDataService->save($userData);
+            $this->userService->saveUser($user);
 
             $this->addFlash('success', 'message_updated_data_successfully');
 
-            return $this->redirectToRoute('user_show');
+            return $this->redirectToRoute('task_index');
         }
 
         return $this->render(

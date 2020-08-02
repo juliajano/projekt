@@ -6,14 +6,11 @@
 namespace App\Controller;
 
 use App\Entity\Note;
-
 use App\Form\NoteType;
-use App\Repository\NoteRepository;
-use Doctrine\ORM\QueryBuilder;
-use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Service\NoteService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,32 +23,41 @@ use Symfony\Component\Routing\Annotation\Route;
 class NoteController extends AbstractController
 {
     /**
+     * Note service.
+     *
+     * @var \App\Service\NoteService
+     */
+    private $noteService;
+
+    /**
+     * NoteController constructor.
+     *
+     * @param \App\Service\NoteService $noteService Note service
+     */
+    public function __construct(NoteService $noteService)
+    {
+        $this->noteService = $noteService;
+    }
+
+    /**
      * Index action.
      *
-     *
-     * @param Request $request HTTP request
-     * @param \App\Repository\NoteRepository $noteRepository Note repository
-     * @param PaginatorInterface $paginator Paginator
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @Route(
      *     "/",
-     *     methods={"GET"},
      *     name="note_index",
      * )
      */
-    public function index(Request $request, NoteRepository $noteRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request): Response
     {
-
-
-
-        $pagination = $paginator->paginate(
-            $noteRepository->queryByAuthor($this->getUser()),
+        $pagination = $this->noteService->createPaginatedList(
             $request->query->getInt('page', 1),
-            NoteRepository::PAGINATOR_ITEMS_PER_PAGE
+            $this->getUser(),
+            $request->query->getAlnum('filters', [])
         );
-
 
         return $this->render(
             'note/index.html.twig',
@@ -73,9 +79,8 @@ class NoteController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      * )
      *
-     * @IsGranted(
-     *     "VIEW",
-     *     subject="note",
+     * @Security(
+     *     "is_granted('ROLE_ADMIN') or is_granted('VIEW', note)"
      * )
      */
     public function show(Note $note): Response
@@ -89,8 +94,7 @@ class NoteController extends AbstractController
     /**
      * Create action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Repository\NoteRepository     $noteRepository Note repository
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -103,20 +107,19 @@ class NoteController extends AbstractController
      *     name="note_create",
      * )
      */
-
-    public function create(Request $request, NoteRepository $noteRepository): Response
+    public function create(Request $request): Response
     {
         $note = new Note();
-        $form = $this->createForm( NoteType::class, $note);
+        $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $note->setAuthor($this->getUser());
-            $note->setCreatedAt(new \DateTime());
             $note->setUpdatedAt(new \DateTime());
-            $noteRepository->save($note);
-
+            $note->setCreatedAt(new \DateTime());
+            $this->noteService->save($note);
             $this->addFlash('success', 'message_created_successfully');
+
             return $this->redirectToRoute('note_index');
         }
 
@@ -129,9 +132,8 @@ class NoteController extends AbstractController
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request            HTTP request
-     * @param \App\Entity\Note                      $note           note entity
-     * @param \App\Repository\NoteRepository        $noteRepository Note repository
+     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
+     * @param \App\Entity\Note                          $note    Note entity
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -145,26 +147,17 @@ class NoteController extends AbstractController
      *     name="note_edit",
      * )
      *
-     * @IsGranted(
-     *     "EDIT",
-     *     subject="note",
+     * @Security(
+     *     "is_granted('ROLE_ADMIN') or is_granted('EDIT', note)"
      * )
      */
-    public function edit(Request $request, Note $note, NoteRepository $noteRepository): Response
+    public function edit(Request $request, Note $note): Response
     {
-        if ($note->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('note_index');
-        }
-
         $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $note->setUpdatedAt(new \DateTime());
-            $noteRepository->save($note);
-
+            $this->noteService->save($note);
             $this->addFlash('success', 'message_updated_successfully');
 
             return $this->redirectToRoute('note_index');
@@ -183,8 +176,7 @@ class NoteController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Entity\Note $task Category entity
-     * @param \App\Repository\NoteRepository $noteRepository Note repository
+     * @param \App\Entity\Note                          $note    Note entity
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -198,19 +190,13 @@ class NoteController extends AbstractController
      *     name="note_delete",
      * )
      *
-     * @IsGranted(
-     *     "DELETE",
-     *     subject="note",
+     * @Security(
+     *     "is_granted('ROLE_ADMIN') or is_granted('DELETE', note)"
      * )
      */
-    public function delete(Request $request, Note $note, NoteRepository $noteRepository): Response
+    public function delete(Request $request, Note $note): Response
     {
-        if ($note->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('note_index');
-        }
-        $form = $this->createForm(NoteType::class, $note, ['method' => 'DELETE']);
+        $form = $this->createForm(FormType::class, $note, ['method' => 'DELETE']);
         $form->handleRequest($request);
 
         if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
@@ -218,8 +204,8 @@ class NoteController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $noteRepository->delete($note);
-            $this->addFlash('success', 'deleted_successfully');
+            $this->noteService->delete($note);
+            $this->addFlash('success', 'message_note_deleted_successfully');
 
             return $this->redirectToRoute('note_index');
         }
@@ -232,5 +218,4 @@ class NoteController extends AbstractController
             ]
         );
     }
-
 }

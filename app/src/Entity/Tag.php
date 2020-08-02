@@ -6,9 +6,14 @@ use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
+ * @ORM\Table(name="tag")
+ *
+ * @UniqueEntity(fields={"name"})
  */
 class Tag
 {
@@ -23,11 +28,6 @@ class Tag
      * @ORM\Column(type="string", length=30)
      */
     private $name;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
 
     /**
      * @ORM\ManyToMany(targetEntity=Note::class, mappedBy="tags")
@@ -63,17 +63,6 @@ class Tag
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Note[]

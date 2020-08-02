@@ -10,6 +10,10 @@
         <dl class="dl-horizontal">
             <dt>{{ 'label_id'|trans }}</dt>
             <dd>{{ note.id }}</dd>
+            {% if is_granted("ROLE_ADMIN") %}
+                <dt>{{ 'label_author'|trans }}</dt>
+                <dd>{{ note.author.email }}</dd>
+            {%  endif %}
             <dt>{{ 'label_created_at'|trans }}</dt>
             <dd>{{ note.createdAt|date('Y/m/d') }}</dd>
             <dt>{{ 'label_updated_at'|trans }}</dt>

@@ -25,7 +25,6 @@ class TagFixtures extends AbstractBaseFixtures implements DependentFixtureInterf
         $this->createMany (50, 'tags', function ($i) {
             $tag = new Tag();
             $tag->setName($this->faker->word);
-           $tag->setUpdatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
 
             return $tag;
         });

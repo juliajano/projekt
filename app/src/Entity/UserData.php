@@ -43,6 +43,12 @@ class UserData
      *     min="3",
      *     max="50"
      * )
+     *
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false
+     * )
+
      */
     private $firstname;
 
@@ -60,6 +66,12 @@ class UserData
      *     min="3",
      *     max="50"
      * )
+     *
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false
+     * )
+
      */
     private $lastname;
 

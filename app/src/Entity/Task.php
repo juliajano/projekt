@@ -9,6 +9,11 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+
+
 
 /**
  * Class Task.
@@ -35,6 +40,10 @@ class Task
      * @var DateTimeInterface
      *
      * @ORM\Column(type="datetime")
+     *
+     * @Assert\DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
@@ -44,6 +53,10 @@ class Task
      * @var DateTimeInterface
      *
      * @ORM\Column(type="datetime")
+     *
+     * @Assert\DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 
@@ -80,9 +93,29 @@ class Task
      */
     private $author;
 
+    /**
+     * Comments.
+     *
+     * @var array
+     *
+     * @ORM\OneToMany(
+     *     targetEntity=Comment::class,
+     *     mappedBy="task",
+     *     orphanRemoval=true
+     * )
+     *
+     * @Assert\All({
+     * @Assert\Type(type="App\Entity\Comment")
+     * })
+     */
+    private $comment;
+
+
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comment = new ArrayCollection();
     }
 
     /**
@@ -207,17 +240,62 @@ class Task
         return $this;
     }
 
-   /* public function getCategory(): ?Category
+    /**
+     * Getter for comment.
+     *
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
     {
-        return $this->category;
+        return $this->comment;
     }
 
-    public function setCategory(?Category $category): self
+    /**
+     * Add comment.
+     *
+     * @return $this
+     */
+    public function addComment(Comment $comment): self
     {
-        $this->category = $category;
+        if (!$this->comment->contains($comment)) {
+            $this->comment[] = $comment;
+            $comment->setTask($this);
+        }
 
         return $this;
     }
 
-    */
+    /**
+     * Remove comment.
+     *
+     * @return $this
+     */
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comment->contains($comment)) {
+            $this->comment->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getTask() === $this) {
+                $comment->setTask(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+    /* public function getCategory(): ?Category
+     {
+         return $this->category;
+     }
+
+     public function setCategory(?Category $category): self
+     {
+         $this->category = $category;
+
+         return $this;
+     }
+
+     */
 }

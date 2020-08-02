@@ -252,6 +252,82 @@
                    <source>label_tasks</source>
                    <target>Tasks</target>
              </trans-unit>
+             <trans-unit id="title_register">
+                   <source>title_register</source>
+                   <target>Register</target>
+             </trans-unit>
+             <trans-unit id="label_email">
+                   <source>label_email</source>
+                   <target>E-mail</target>
+             </trans-unit>
+             <trans-unit id="label_password">
+                   <source>label_password</source>
+                   <target>Password</target>
+             </trans-unit>
+             <trans-unit id="label_confirm_password">
+                   <source>label_confirm_password</source>
+                   <target>Confirm password</target>
+             </trans-unit>
+             <trans-unit id="label_userdata">
+                   <source>label_userdata</source>
+                   <target>User data</target>
+             </trans-unit>
+             <trans-unit id="message_registered_successfully">
+                   <source>message_registered_successfully</source>
+                   <target>Registered succesfully</target>
+             </trans-unit>
+             <trans-unit id="label_comments">
+                   <source>label_comments</source>
+                   <target>Comments</target>
+             </trans-unit>
+             <trans-unit id="add_comment">
+                   <source>add_comment</source>
+                   <target>Add comment</target>
+             </trans-unit>
+             <trans-unit id="title_comment_create">
+                   <source>title_comment_create</source>
+                   <target>Add comment</target>
+             </trans-unit>
+             <trans-unit id="title_comment_delete">
+                   <source>title_comment_delete</source>
+                   <target>Delete comment</target>
+             </trans-unit>
+             <trans-unit id="message_comment_deleted_successfully">
+                   <source>message_comment_deleted_successfully</source>
+                   <target>Comment deleted successfully</target>
+             </trans-unit>
+             <trans-unit id="action_register">
+                   <source>action_register</source>
+                   <target>Register</target>
+             </trans-unit>
+             <trans-unit id="label_author">
+                   <source>label_author</source>
+                   <target>Author</target>
+             </trans-unit>
+             <trans-unit id="title_users_index">
+                   <source>title_users_index</source>
+                   <target>Users</target>
+             </trans-unit>
+             <trans-unit id="message_deleted_successfully">
+                   <source>message_deleted_successfully</source>
+                   <target>Deleted successfully</target>
+             </trans-unit>
+             <trans-unit id="comment_created_successfully">
+                   <source>comment_created_successfully</source>
+                   <target>Created successfully</target>
+             </trans-unit>
+             <trans-unit id="message_note_deleted_successfully">
+                   <source>message_note_deleted_successfully</source>
+                   <target>Note deleted successfully</target>
+             </trans-unit>
+             <trans-unit id="message_tag_is_related_to_resources">
+                   <source>message_tag_is_related_to_resources</source>
+                   <target>Tag is related to resources</target>
+             </trans-unit>
+             <trans-unit id="title_task_delete">
+                   <source>title_task_delete</source>
+                   <target>Delete task</target>
+             </trans-unit>
          </body>
     </file>
 </xliff>

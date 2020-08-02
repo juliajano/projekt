@@ -100,16 +100,21 @@ class Note
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    /**
+     * @param \DateTimeInterface $created_at
+     * @return $this
+     */
+    public function setCreatedAt(\DateTimeInterface $created_at): void
     {
         $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeInterface

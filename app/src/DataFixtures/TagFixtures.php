@@ -9,7 +9,6 @@ use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-
 /**
  * Class TagFixtures.
  */
@@ -22,7 +21,7 @@ class TagFixtures extends AbstractBaseFixtures implements DependentFixtureInterf
      */
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany (50, 'tags', function ($i) {
+        $this->createMany(50, 'tags', function ($i) {
             $tag = new Tag();
             $tag->setName($this->faker->word);
 
@@ -42,5 +41,4 @@ class TagFixtures extends AbstractBaseFixtures implements DependentFixtureInterf
     {
         return [CategoryFixtures::class];
     }
-
 }

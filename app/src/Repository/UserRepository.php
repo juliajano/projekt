@@ -11,10 +11,10 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use function get_class;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function get_class;
 
 /**
  * Class UserRepository.
@@ -64,10 +64,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * Used to upgrade (rehash) the user's password automatically over time.
      *
      * @param UserInterface $user
-     * @param string        $newEncodedPassword
-     *
+     * @param string $newEncodedPassword
      * @throws ORMException
      * @throws OptimisticLockException
+     *
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
@@ -82,9 +82,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     /**
      * Save record.
-     *
+
      * @param User $user
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      */

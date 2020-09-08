@@ -116,7 +116,7 @@ class TaskRepository extends ServiceEntityRepository
                 'partial category.{id, title}',
                 'partial tags.{id, name}',
                 'partial author.{id, email}',
-                )
+            )
             ->join('task.category', 'category')
             ->join('task.author', 'author')
             ->leftJoin('task.tags', 'tags');

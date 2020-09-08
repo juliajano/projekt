@@ -54,7 +54,6 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata->setLastname($this->faker->lastName);
             $user->setUserData($userdata);
 
-
             return $user;
         });
 
@@ -73,7 +72,6 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata->setFirstname($this->faker->firstName);
             $userdata->setLastname($this->faker->lastName);
             $user->setUserData($userdata);
-
 
             return $user;
         });

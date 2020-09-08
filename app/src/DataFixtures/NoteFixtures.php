@@ -9,7 +9,6 @@ use App\Entity\Note;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-
 /**
  * Class NoteFixtures.
  */
@@ -22,7 +21,7 @@ class NoteFixtures extends AbstractBaseFixtures implements DependentFixtureInter
      */
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany (50, 'notes', function ($i) {
+        $this->createMany(50, 'notes', function ($i) {
             $note = new Note();
             $note->setTitle($this->faker->sentence);
             $note->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
@@ -41,7 +40,6 @@ class NoteFixtures extends AbstractBaseFixtures implements DependentFixtureInter
             $note->setAuthor($this->getRandomReference('users'));
 
             return $note;
-
         });
 
         $manager->flush();
@@ -57,5 +55,4 @@ class NoteFixtures extends AbstractBaseFixtures implements DependentFixtureInter
     {
         return [CategoryFixtures::class, TagFixtures::class, UserFixtures::class];
     }
-
 }

@@ -2,11 +2,10 @@
 /**
  * UserData entity.
  */
+
 namespace App\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
-use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,7 +27,6 @@ class UserData
      */
     private $id;
 
-
     /**
      * Firstname.
      *
@@ -48,7 +46,6 @@ class UserData
      *     pattern="/\d/",
      *     match=false
      * )
-
      */
     private $firstname;
 
@@ -71,7 +68,6 @@ class UserData
      *     pattern="/\d/",
      *     match=false
      * )
-
      */
     private $lastname;
 
@@ -80,17 +76,15 @@ class UserData
      */
     private $user;
 
-
     /**
      * Getter for Id.
      *
-     * @return int|null Result.
+     * @return int|null result
      */
     public function getId(): ?int
     {
         return $this->id;
     }
-
 
     /**
      * Getter for Firstname.
@@ -134,8 +128,6 @@ class UserData
 
     /**
      * Getter for the User.
-     *
-     * @return User|null
      */
     public function getUser(): ?User
     {
@@ -144,13 +136,9 @@ class UserData
 
     /**
      * Setter for the User.
-     *
-     * @param User|null $user
      */
     public function setUser(?User $user): void
     {
         $this->user = $user;
     }
-
-
 }

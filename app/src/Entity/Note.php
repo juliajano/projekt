@@ -70,7 +70,6 @@ class Note
         $this->tags = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -100,16 +99,12 @@ class Note
         return $this;
     }
 
-    /**
-     * @return \DateTimeInterface|null
-     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTimeInterface $created_at
      * @return $this
      */
     public function setCreatedAt(\DateTimeInterface $created_at): void
@@ -178,5 +173,4 @@ class Note
 
         return $this;
     }
-
 }

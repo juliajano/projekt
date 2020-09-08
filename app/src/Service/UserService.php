@@ -29,12 +29,11 @@ class UserService
      */
     private $paginator;
 
-
     /**
      * UserService constructor.
-     *
-     * @param \App\Repository\UserRepository $userRepository User repository
+     * @param UserRepository $userRepository
      * @param PaginatorInterface $paginator
+     *
      */
     public function __construct(UserRepository $userRepository, PaginatorInterface $paginator)
     {
@@ -82,6 +81,4 @@ class UserService
     {
         return $this->userRepository->findOneBy($array);
     }
-
-
 }

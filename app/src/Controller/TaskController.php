@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class TaskController.
  *
- * @Route("/task")
+ * @Route("/")
  */
 class TaskController extends AbstractController
 {

@@ -9,7 +9,6 @@ use App\Entity\Task;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-
 /**
  * Class TaskFixtures.
  */
@@ -22,7 +21,7 @@ class TaskFixtures extends AbstractBaseFixtures implements DependentFixtureInter
      */
     public function loadData(ObjectManager $manager): void
     {
-        $this->createMany (50, 'tasks', function ($i) {
+        $this->createMany(50, 'tasks', function ($i) {
             $task = new Task();
             $task->setTitle($this->faker->sentence);
             $task->setCreatedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
@@ -37,6 +36,7 @@ class TaskFixtures extends AbstractBaseFixtures implements DependentFixtureInter
                 $task->addTag($tag);
             }
             $task->setAuthor($this->getRandomReference('users'));
+
             return $task;
         });
 
@@ -53,5 +53,4 @@ class TaskFixtures extends AbstractBaseFixtures implements DependentFixtureInter
     {
         return [CategoryFixtures::class, UserFixtures::class];
     }
-
 }

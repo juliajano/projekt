@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use function Composer\Autoload\includeFile;
 
 /**
  * Class TaskController.
@@ -83,8 +82,6 @@ class UserController extends AbstractController
         );
     }
 
-
-
     /**
      * Show action.
      *
@@ -105,16 +102,14 @@ class UserController extends AbstractController
         );
     }
 
-
     /**
      * ChangePassword action.
      *
      * @param Request $request HTTP request
      * @param User $user
+     * @param UserRepository $repository
      * @param UserPasswordEncoderInterface $passwordEncoder
-     *
      * @return Response HTTP response
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      *
@@ -124,8 +119,8 @@ class UserController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="user_password",
      * )
-     *
      */
+
     public function changePassword(Request $request, User $user, UserRepository $repository, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         if (!($this->isGranted('ROLE_ADMIN'))) {
@@ -164,12 +159,8 @@ class UserController extends AbstractController
     /**
      * Change UserData action.
      *
-     * @param Request            $request
-     * @param User               $user
      * @param UserRepository     $userRepository
      * @param UserDataRepository $userDataRepository
-     *
-     * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException *
@@ -181,7 +172,7 @@ class UserController extends AbstractController
      *     name="user_data_edit",
      * )
      */
-    public function editData(Request $request, User $user, UserRepository $repository, UserDataRepository $UserDataRepository ): Response
+    public function editData(Request $request, User $user, UserRepository $repository, UserDataRepository $UserDataRepository): Response
     {
         if (!($this->isGranted('ROLE_ADMIN'))) {
             if ($user !== $this->getUser()) {
@@ -210,8 +201,5 @@ class UserController extends AbstractController
                 'user' => $user,
             ]
         );
-
     }
-
-
 }

@@ -2,14 +2,14 @@
 /**
  * Class Comment.
  */
+
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Comment.
@@ -17,7 +17,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  * @ORM\Table(name="comments")
  */
-
 class Comment
 {
     /**
@@ -46,7 +45,6 @@ class Comment
      */
     private $content;
 
-
     /**
      * Created At.
      *
@@ -72,7 +70,6 @@ class Comment
      * @Assert\Type(type="App\Entity\Task")
      */
     private $task;
-
 
     /**
      * Getter for Id.
@@ -100,11 +97,8 @@ class Comment
         $this->content = $content;
     }
 
-
     /**
-     * Getter for CreatedAt
-     *
-     * @return DateTimeInterface|null
+     * Getter for CreatedAt.
      */
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -112,16 +106,12 @@ class Comment
     }
 
     /**
-     * Setter for CreatedAt
-     *
-     * @param DateTimeInterface $createdAt
+     * Setter for CreatedAt.
      */
     public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
-
     }
-
 
     /**
      * Getter for Task.
@@ -140,5 +130,4 @@ class Comment
     {
         $this->task = $task;
     }
-
 }

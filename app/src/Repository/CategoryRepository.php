@@ -55,7 +55,6 @@ class CategoryRepository extends ServiceEntityRepository
         $this->_em->flush($category);
     }
 
-
     /**
      * Query all records.
      *

@@ -12,15 +12,26 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20200727095736 extends AbstractMigration
 {
-    public function getDescription() : string
+    /**
+     * GetDescription method.
+     * @return string
+     */
+    public function getDescription(): string
     {
+
         return '';
     }
 
-    public function up(Schema $schema) : void
+    /**
+     * Up method.
+     * @param Schema $schema
+     * @throws \Doctrine\DBAL\DBALException
+     */
+
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE category (id INT AUTO_INCREMENT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, title VARCHAR(64) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE comments (id INT AUTO_INCREMENT NOT NULL, task_id INT NOT NULL, content VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_5F9E962A8DB60186 (task_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -43,10 +54,15 @@ final class Version20200727095736 extends AbstractMigration
         $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9AB945D82 FOREIGN KEY (userdata_id) REFERENCES userdata (id)');
     }
 
-    public function down(Schema $schema) : void
+    /**
+     * Down method.
+     * @param Schema $schema
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE note DROP FOREIGN KEY FK_CFBDFA1412469DE2');
         $this->addSql('ALTER TABLE tasks DROP FOREIGN KEY FK_5058659712469DE2');

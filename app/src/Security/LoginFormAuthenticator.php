@@ -6,7 +6,6 @@
 namespace App\Security;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Service\UserService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,10 +61,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     /**
      * LoginFormAuthenticator constructor.
      *
-     * @param UserService $userService User service
-     * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator URL generator
-     * @param \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface $csrfTokenManager CSRF token manager
-     * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder Password encoder
+     * @param UserService                                                           $userService      User service
+     * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface            $urlGenerator     URL generator
+     * @param \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface            $csrfTokenManager CSRF token manager
+     * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder  Password encoder
      */
     public function __construct(UserService $userService, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {

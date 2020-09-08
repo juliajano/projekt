@@ -35,6 +35,7 @@ class TaskType extends AbstractType
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
     }
+
     /**
      * Builds the form.
      *
@@ -78,7 +79,6 @@ class TaskType extends AbstractType
                 'required' => false,
                 'attr' => ['max_length' => 128],
             ]
-
         );
         $builder->get('tags')->addModelTransformer(
             $this->tagsDataTransformer

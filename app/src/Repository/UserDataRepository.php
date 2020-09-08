@@ -4,10 +4,11 @@ namespace App\Repository;
 
 use App\Entity\UserData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * Class UserDataRepository.
  * @method UserData|null find($id, $lockMode = null, $lockVersion = null)
  * @method UserData|null findOneBy(array $criteria, array $orderBy = null)
  * @method UserData[]    findAll()
@@ -18,11 +19,13 @@ class UserDataRepository extends ServiceEntityRepository
     /**
      * UserDataRepository constructor.
      * @param ManagerRegistry $registry
+     *
      */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserData::class);
     }
+
     /**
      * Query all records.
      *
@@ -35,12 +38,11 @@ class UserDataRepository extends ServiceEntityRepository
     }
 
     /**
-     * Save record.
-     *
+     * Save method.
      * @param UserData $userData
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
      */
     public function save(UserData $userData): void
     {
@@ -59,8 +61,6 @@ class UserDataRepository extends ServiceEntityRepository
     {
         return $queryBuilder ?: $this->createQueryBuilder('user_data');
     }
-
-
 
     // /**
     //  * @return UserData[] Returns an array of UserData objects

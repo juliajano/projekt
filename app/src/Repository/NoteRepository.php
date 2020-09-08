@@ -59,7 +59,7 @@ class NoteRepository extends ServiceEntityRepository
                 'partial category.{id, title}',
                 'partial tags.{id, name}',
                 'partial author.{id, email}',
-                )
+            )
             ->join('note.author', 'author')
             ->join('note.category', 'category')
             ->leftJoin('note.tags', 'tags')

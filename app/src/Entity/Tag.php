@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ORM\Table(name="tag")
@@ -39,7 +38,6 @@ class Tag
      */
     private $tasks;
 
-
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -63,7 +61,6 @@ class Tag
         return $this;
     }
 
-
     /**
      * @return Collection|Note[]
      */
@@ -73,7 +70,6 @@ class Tag
     }
 
     /**
-     * @param Note $note
      * @return $this
      */
     public function addNote(Note $note): self
@@ -87,7 +83,6 @@ class Tag
     }
 
     /**
-     * @param Note $note
      * @return $this
      */
     public function removeNote(Note $note): self
@@ -127,5 +122,4 @@ class Tag
 
         return $this;
     }
-
 }

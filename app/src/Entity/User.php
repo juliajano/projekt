@@ -84,17 +84,16 @@ class User implements UserInterface
      */
     private $password;
     /**
- * Userdata.
- *
- * @ORM\OneToOne(
- *     targetEntity="App\Entity\UserData",
- *     inversedBy="user",
- *     cascade={"persist", "remove"})
- *
- * @ORM\JoinColumn(nullable=false)
- */
+     * Userdata.
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="App\Entity\UserData",
+     *     inversedBy="user",
+     *     cascade={"persist", "remove"})
+     *
+     * @ORM\JoinColumn(nullable=false)
+     */
     private $userdata;
-
 
     public function getId(): ?int
     {
@@ -200,8 +199,6 @@ class User implements UserInterface
 
     /**
      * Getter for User Data.
-     *
-     * @return UserData|null
      */
     public function getUserdata(): ?UserData
     {
@@ -210,8 +207,6 @@ class User implements UserInterface
 
     /**
      * Setter for User Data.
-     *
-     * @param UserData|null $userdata
      */
     public function setUserdata(?UserData $userdata): void
     {
